@@ -37,7 +37,7 @@ public class UserController {
   @Transactional
   public @ResponseBody Map<String,Object> insertUser(User user){
     Map map = new HashMap();
-
+    System.out.println("asdf");
     Session session =sessionFactory.getCurrentSession();
     if(userService.saveOrUpdate(user)){
       map.put("status","200");
