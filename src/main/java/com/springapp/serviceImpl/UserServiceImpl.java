@@ -28,4 +28,8 @@ public class UserServiceImpl implements UserService {
   public boolean saveOrUpdate(User user) {
     return userDao.saveOrUpdate(user);
   }
+@Override
+  public User findUser(int id) {
+    return userDao.findUser(id);
+  }
 }

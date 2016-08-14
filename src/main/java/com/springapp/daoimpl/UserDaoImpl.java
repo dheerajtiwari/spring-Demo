@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.List;
 import java.util.logging.Logger;
+import org.hibernate.Hibernate;
+import org.springframework.orm.hibernate4.HibernateTemplate;
 
 @Repository
 @EnableTransactionManagement
@@ -18,6 +20,15 @@ public class UserDaoImpl implements UserDao {
 
   @Autowired
   SessionFactory sessionFactory;
+ 
+  private HibernateTemplate template;
+ 
+    @Autowired
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        template = new HibernateTemplate(sessionFactory);
+    }
+  
+  
 
   @Override
   public List<User> list() {
@@ -27,7 +38,7 @@ public class UserDaoImpl implements UserDao {
   @Override
   public boolean delete(User user) {
     try {
-      sessionFactory.getCurrentSession().delete(user);
+      template.delete(user);
     }catch (Exception exception){
       return false;
     }
@@ -36,19 +47,13 @@ public class UserDaoImpl implements UserDao {
 
   @Override
   public boolean saveOrUpdate(User user) {
-
-    Session session;
-    try {
-      session = sessionFactory.getCurrentSession();
-    } catch (HibernateException e) {
-      session = sessionFactory.openSession();
-    }
-    Logger.getAnonymousLogger().info("session = "+session);
-    System.out.println(session);
-
-
-
-    sessionFactory.getCurrentSession().saveOrUpdate(user);
+    template.save(user);
     return true;
+  }
+
+  @Override
+  public User findUser(int id) {
+    return template.get(User.class, id);
+    
   }
 }
