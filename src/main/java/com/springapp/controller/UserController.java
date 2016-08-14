@@ -1,6 +1,7 @@
 package com.springapp.controller;
 
 import com.springapp.entities.User;
+import com.springapp.entities.UserRequest;
 import com.springapp.service.UserService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping(value = "users")
@@ -33,17 +35,17 @@ public class UserController {
 
   }
 
-  @RequestMapping(value = "/insertUser",method = RequestMethod.POST,headers="Accept=*/*",  produces="application/json")
+  @RequestMapping(value = "/insertUser",method = RequestMethod.POST,  produces="application/json")
   @Transactional
-  public @ResponseBody Map<String,Object> insertUser(User user){
+  public @ResponseBody Map<String,Object> insertUser(@RequestBody UserRequest userRequest){
     Map map = new HashMap();
     System.out.println("asdf");
-    Session session =sessionFactory.getCurrentSession();
-    if(userService.saveOrUpdate(user)){
+    
+    
       map.put("status","200");
-      map.put("message","Your Record inserted");
+      map.put("message",userRequest.getUserName());
 
-    }
+
     return map;
   }
 }
