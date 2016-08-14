@@ -32,7 +32,7 @@ public class UserDaoImpl implements UserDao {
 
   @Override
   public List<User> list() {
-    return  sessionFactory.getCurrentSession().createQuery(" from User ").list();
+    return template.loadAll(User.class);
   }
 
   @Override

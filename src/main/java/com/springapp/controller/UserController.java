@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import static org.springframework.http.HttpStatus.OK;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +57,7 @@ public class UserController {
 
   @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
   @Transactional
-  public ResponseEntity<ApiResponse> insertUser(@PathVariable(value = "userId") int userId) throws NotFoundException {
+  public ResponseEntity<ApiResponse> getUser(@PathVariable(value = "userId") int userId) throws NotFoundException {
     User user = userService.findUser(userId);
 
     if (user == null) {
@@ -78,5 +79,17 @@ public class UserController {
       throw new UnexpectedException("Something went wrong.", "NOT_FOUND");
     }
     return new ResponseEntity(new ApiResponseSuccess("Deleted Successfully"), OK);
+  }
+  
+  @RequestMapping(method = RequestMethod.GET)
+  @Transactional
+  public ResponseEntity<ApiResponse> getAllUsers() throws NotFoundException {
+    List<User> allUsers = userService.list();
+
+    if (allUsers.size() < 1) {
+      throw new NotFoundException("User not found.", "NOT_FOUND");
+    }
+
+    return new ResponseEntity(new ApiResponseSuccess(allUsers), OK);
   }
 }
