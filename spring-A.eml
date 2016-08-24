@@ -6,7 +6,6 @@
 		<testFolder url="file://$MODULE_DIR$/src/test/java"/>
 		<excludeFolder url="file://$MODULE_DIR$/target"/>
 	</contentEntry>
-	<lib name="Tomcat 7.0.37" scope="PROVIDED"/>
 	<lib name="Tomcat 7.0.69" scope="PROVIDED"/>
 	<lib name="Maven: javax.servlet.jsp:jsp-api:2.1" scope="PROVIDED"/>
 	<lib name="Maven: org.springframework:spring-test:4.1.1.RELEASE" scope="TEST"/>
@@ -14,7 +13,7 @@
 	<lib name="Maven: junit:junit:4.11" scope="TEST"/>
 	<lib name="Maven: org.hamcrest:hamcrest-core:1.3" scope="TEST"/>
 	<levels>
-		<level name="Tomcat 7.0.37" value="application_server_libraries"/>
+		<level name="Tomcat 7.0.37" value="project"/>
 		<level name="Tomcat 7.0.69" value="application_server_libraries"/>
 		<level name="Hibernate 4.2.2-4.2.2" value="project"/>
 		<level name="Maven: org.projectlombok:lombok:1.14.8" value="project"/>
