@@ -8,6 +8,7 @@ import com.springapp.entities.UserRequest;
 import com.springapp.exception.AlreadyExistException;
 import com.springapp.exception.NotFoundException;
 import com.springapp.exception.UnexpectedException;
+import com.springapp.repository.UserRepository;
 import com.springapp.service.UserService;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,50 +47,26 @@ public class UserController {
   @RequestMapping(value = "/insert", method = RequestMethod.POST, produces = "application/json")
   @Transactional
   public ResponseEntity<ApiResponse> insertUser(@RequestBody UserRequest userRequest) throws UnexpectedException {
-    Map map = new HashMap();
-    User user = new User(userRequest.getUserName(), userRequest.getPassword(), userRequest.getEmail(), userRequest.getAddress());
-
-    if (!userService.saveOrUpdate(user)) {
-      throw new UnexpectedException("Something went wrong.", "NOT_FOUND");
-    }
+    userService.addUser(userRequest);
     return new ResponseEntity(new ApiResponseSuccess("Added Successfully!"), OK);
   }
 
   @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
   @Transactional
   public ResponseEntity<ApiResponse> getUser(@PathVariable(value = "userId") int userId) throws NotFoundException {
-    User user = userService.findUser(userId);
-
-    if (user == null) {
-      throw new NotFoundException("User not found.", "NOT_FOUND");
-    }
-
-    return new ResponseEntity(new ApiResponseSuccess(user), OK);
+    return new ResponseEntity(new ApiResponseSuccess(userService.getUser(userId)), OK);
   }
 
   @RequestMapping(value = "/{userId}/delete", method = RequestMethod.DELETE)
   @Transactional
   public ResponseEntity<ApiResponse> deleteUser(@PathVariable(value = "userId") int userId) throws NotFoundException, UnexpectedException {
-    User user = userService.findUser(userId);
-
-    if (user == null) {
-      throw new NotFoundException("User not found.", "NOT_FOUND");
-    }
-    if (!userService.delete(user)) {
-      throw new UnexpectedException("Something went wrong.", "NOT_FOUND");
-    }
+    userService.deleteUser(userId);
     return new ResponseEntity(new ApiResponseSuccess("Deleted Successfully"), OK);
   }
-  
+
   @RequestMapping(method = RequestMethod.GET)
   @Transactional
   public ResponseEntity<ApiResponse> getAllUsers() throws NotFoundException {
-    List<User> allUsers = userService.list();
-
-    if (allUsers.size() < 1) {
-      throw new NotFoundException("User not found.", "NOT_FOUND");
-    }
-
-    return new ResponseEntity(new ApiResponseSuccess(allUsers), OK);
+    return new ResponseEntity(new ApiResponseSuccess(userService.getAllUsers()), OK);
   }
 }

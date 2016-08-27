@@ -2,6 +2,7 @@ package com.springapp.serviceImpl;
 
 import com.springapp.dao.UserDao;
 import com.springapp.entities.User;
+import com.springapp.repository.UserRepository;
 import com.springapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements  UserRepository {
 
   @Autowired
   UserDao userDao;
