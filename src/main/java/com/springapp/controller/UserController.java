@@ -22,6 +22,7 @@ import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.validation.Valid;
 import static org.springframework.http.HttpStatus.OK;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,7 +47,7 @@ public class UserController {
 
   @RequestMapping(value = "/insert", method = RequestMethod.POST, produces = "application/json")
   @Transactional
-  public ResponseEntity<ApiResponse> insertUser(@RequestBody UserRequest userRequest) throws UnexpectedException {
+  public ResponseEntity<ApiResponse> insertUser(@Valid @RequestBody UserRequest userRequest) throws UnexpectedException {
     userService.addUser(userRequest);
     return new ResponseEntity(new ApiResponseSuccess("Added Successfully!"), OK);
   }
