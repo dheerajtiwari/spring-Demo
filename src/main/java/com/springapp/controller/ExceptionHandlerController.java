@@ -11,7 +11,10 @@ import com.springapp.exception.AlreadyExistException;
 import com.springapp.exception.NotFoundException;
 import com.springapp.exception.UnexpectedException;
 import java.beans.PropertyEditorSupport;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
@@ -47,5 +50,19 @@ public class ExceptionHandlerController extends Exception {
   public ResponseEntity<ApiResponse> notFound(UnexpectedException e) {
     return new ResponseEntity(new ApiResponseError(e.getMessage(), e.getCode()), HttpStatus.NOT_FOUND);
   }
+  
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<ApiResponse> invalidAuth(ConstraintViolationException e) {
+    Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
+    String violationMessage = "Invalid Parameters.";
+    if (constraintViolations.size() > 0) {
+      violationMessage = "Following Constraints failed : ";
+      for (ConstraintViolation<?> constraintViolation : constraintViolations) {
+        violationMessage += constraintViolation.getMessage() + " ";
+      }
+    }
+    return new ResponseEntity(new ApiResponseError(violationMessage, "INVALID_PARAMETERS"), HttpStatus.BAD_REQUEST);
+  }
+  
   
 }
