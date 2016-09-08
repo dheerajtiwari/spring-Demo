@@ -5,10 +5,10 @@ import com.springapp.entities.UserRequest;
 import com.springapp.exception.NotFoundException;
 import com.springapp.exception.UnexpectedException;
 import com.springapp.repository.UserRepository;
-
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -18,6 +18,9 @@ public class UserService {
 
   public void addUser(UserRequest userRequest) throws UnexpectedException {
 
+
+
+
     User user = new User(userRequest.getUserName(), userRequest.getPassword(), userRequest.getEmail(), userRequest.getAddress());
 
     if (!userRepository.saveOrUpdate(user)) {
@@ -25,6 +28,9 @@ public class UserService {
     }
 
   }
+
+
+
 
   public User getUser(int userId) throws NotFoundException {
 
