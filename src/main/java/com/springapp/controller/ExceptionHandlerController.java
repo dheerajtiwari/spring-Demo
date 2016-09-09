@@ -39,13 +39,7 @@ public class ExceptionHandlerController extends Exception {
       public void setAsText(String text) throws IllegalArgumentException {
         setValue(text.toLowerCase());
       }
-
     });
-  }
-
-  @InitBinder
-  protected void initBinders(WebDataBinder binder) throws ServletException {
-//    binder.setValidator(validator);
   }
 
   @ExceptionHandler(AlreadyExistException.class)
@@ -79,21 +73,14 @@ public class ExceptionHandlerController extends Exception {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ApiResponse> invalidAuth(MethodArgumentNotValidException e) {
-
     final BindingResult bindingResult = e.getBindingResult();
     final List<ObjectError> allErrors = bindingResult.getAllErrors();
-
     String message = "";
-
     for (ObjectError es : allErrors) {
-
       final Object[] arguments = es.getArguments();
-
       message += es.getDefaultMessage();
     }
-
     return new ResponseEntity(new ApiResponseError(message, "INVALID_PARAMETERS"),
             HttpStatus.NOT_ACCEPTABLE);
   }
-
 }
