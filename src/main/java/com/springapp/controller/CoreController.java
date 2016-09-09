@@ -29,7 +29,6 @@ public class CoreController {
   public ResponseEntity<ApiResponse> stepOne(@Valid @RequestBody StepOneRequest stepOneRequest) throws UnexpectedException {
     System.out.println("Inside stepOne.");
     stepOneService.requestStepOne(stepOneRequest);
-
     return new ResponseEntity(new ApiResponseSuccess("Added Successfully!"), OK);
   }
 
