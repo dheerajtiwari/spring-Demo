@@ -17,7 +17,7 @@ import lombok.Setter;
 public class StepOneRequest {
 
   @NotNull
-  @Size(min=2, max=30,message = "Invalid Sender")
+  @Size(min=2, max=30,message = "Invalid Sender.")
   public String sender;
   @NotNull
   public String content;

@@ -31,6 +31,4 @@ public class CoreController {
     stepOneService.requestStepOne(stepOneRequest);
     return new ResponseEntity(new ApiResponseSuccess("Added Successfully!"), OK);
   }
-
-
 }

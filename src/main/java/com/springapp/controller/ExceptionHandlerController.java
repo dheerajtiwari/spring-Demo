@@ -11,6 +11,7 @@ import com.springapp.exception.AlreadyExistException;
 import com.springapp.exception.NotFoundException;
 import com.springapp.exception.UnexpectedException;
 import java.beans.PropertyEditorSupport;
+import java.util.List;
 import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.WebDataBinder;
@@ -30,8 +33,7 @@ public class ExceptionHandlerController extends Exception {
 
   @InitBinder
   public void initBinder(WebDataBinder binder) {
-    
-    
+
     binder.registerCustomEditor(String.class, new PropertyEditorSupport() {
       @Override
       public void setAsText(String text) throws IllegalArgumentException {
@@ -40,13 +42,11 @@ public class ExceptionHandlerController extends Exception {
 
     });
   }
-  
-  @InitBinder
-protected void initBinders(WebDataBinder binder) throws ServletException
-{
-//    binder.setValidator(validator);
-}
 
+  @InitBinder
+  protected void initBinders(WebDataBinder binder) throws ServletException {
+//    binder.setValidator(validator);
+  }
 
   @ExceptionHandler(AlreadyExistException.class)
   public ResponseEntity<ApiResponse> unHandledExceptions(Exception e) {
@@ -77,9 +77,22 @@ protected void initBinders(WebDataBinder binder) throws ServletException
     return new ResponseEntity(new ApiResponseError(violationMessage, "INVALID_PARAMETERS"), HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler( MethodArgumentNotValidException.class)
+  @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ApiResponse> invalidAuth(MethodArgumentNotValidException e) {
-    return new ResponseEntity(new ApiResponseError("Missing Parameter for this api.", "INVALID_PARAMETERS"),
+
+    final BindingResult bindingResult = e.getBindingResult();
+    final List<ObjectError> allErrors = bindingResult.getAllErrors();
+
+    String message = "";
+
+    for (ObjectError es : allErrors) {
+
+      final Object[] arguments = es.getArguments();
+
+      message += es.getDefaultMessage();
+    }
+
+    return new ResponseEntity(new ApiResponseError(message, "INVALID_PARAMETERS"),
             HttpStatus.NOT_ACCEPTABLE);
   }
 
